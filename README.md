@@ -25,6 +25,11 @@ Run the generator from within the new folder:
 $ cd my-slush-nodeapi && slush nodeapi
 ```
 
+Create a model - Will ask if you want to create the assoicated routes and tests.
+```bash
+$ slush nodeapi:model <Model Name>
+```
+
 ## Getting To Know Slush
 
 Slush is a tool that uses Gulp for project scaffolding.
