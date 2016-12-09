@@ -1,0 +1,28 @@
+{
+  "name": "<%= appName %>",
+  "main": "server.js",
+  "version": "<%= appVersion %>",
+  "engines": {
+    "node": "6.9.2",
+    "npm": "3.10.9"
+  },
+  "repository": "https://github.com/<%= userName %>/<%= appName %>.git",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "~2.3.0",
+    "body-parser": "~1.15.2",
+    "express": "~4.13.4",
+    "jsonwebtoken": "~7.1.9",
+    "method-override": "~2.3.6",
+    "mongoose": "~4.6.8",
+    "q": "~1.4.1"
+  },
+  "devDependencies": {
+    "chai": "~3.5.0",
+    "chai-http": "~3.0.0",
+    "mocha": "~3.1.2"
+  },
+  "scripts": {
+    "test": "mocha test/test*"
+  }
+}
