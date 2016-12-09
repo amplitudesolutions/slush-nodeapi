@@ -113,6 +113,10 @@ gulp.task('model', function (done) {
         name: 'modelName',
         message: 'What is the name of the model?',
         default: 'testing'
+    }, {
+        name: 'genRoutes',
+        message: 'Generate routes as well?',
+        default: 'Yes'
     }];
 
     //Ask
