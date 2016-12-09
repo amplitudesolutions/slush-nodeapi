@@ -1,6 +1,7 @@
 var User = require('../models/user');
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
+var routes = require("require-dir")();
 
 module.exports = function(router) {
     
@@ -75,9 +76,6 @@ module.exports = function(router) {
     // middleware to use for all requests
     router.use(function(req, res, next) {
         // do logging
-        
-        // will need to ensure proper authentication as well as routing to the correct users bike information.
-        // Not worried about this just yet though.
 
         var token = req.params.token || req.headers.authorization;
         if (token) {
@@ -99,8 +97,8 @@ module.exports = function(router) {
         };
     });
     
-    // Put all the links to the routes in here. 
-    // Need to switch to doing with https://github.com/aseemk/requireDir, it will require a dir and loop through everything.
-    // http://www.codekitchen.ca/guide-to-structuring-and-building-a-restful-api-using-express-4/
-    
+    // Loops through DIR and includes routes
+    Object.keys(routes).forEach(function(routeName) {
+        require('./' + routeName)(router);
+    });
 }

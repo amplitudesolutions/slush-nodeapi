@@ -15,7 +15,8 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     _ = require('underscore.string'),
     inquirer = require('inquirer'),
-    path = require('path');
+    path = require('path'),
+    infection = require('inflection');
 
 function format(string) {
     var username = string.toLowerCase();
@@ -92,7 +93,7 @@ gulp.task('default', function (done) {
                 return done();
             }
             answers.appNameSlug = _.slugify(answers.appName);
-            gulp.src(__dirname + '/templates/**')
+            gulp.src(__dirname + '/templates/src/**')
                 .pipe(template(answers))
                 .pipe(rename(function (file) {
                     if (file.basename[0] === '_') {
@@ -109,14 +110,21 @@ gulp.task('default', function (done) {
 });
 
 gulp.task('model', function (done) {
+    var _this = this;
+    // _this.args = arguments passed in as an array if multiple.
+    
     var prompts = [{
-        name: 'modelName',
-        message: 'What is the name of the model?',
-        default: 'testing'
-    }, {
+        type: 'confirm',
         name: 'genRoutes',
-        message: 'Generate routes as well?',
-        default: 'Yes'
+        message: 'Generate routes as well?'
+    }, {
+        type: 'confirm',
+        name: 'genTests',
+        message: 'Generate tests as well?'
+    }, {
+        type: 'confirm',
+        name: 'moveon',
+        message: 'Continue?'
     }];
 
     //Ask
@@ -125,19 +133,38 @@ gulp.task('model', function (done) {
             if (!answers.moveon) {
                 return done();
             }
-            answers.modelNameNameSlug = _.slugify(answers.modelName);
-            // gulp.src(__dirname + '/templates/**')
-            //     .pipe(template(answers))
-            //     .pipe(rename(function (file) {
-            //         if (file.basename[0] === '_') {
-            //             file.basename = '.' + file.basename.slice(1);
-            //         }
-            //     }))
-            //     .pipe(conflict('./'))
-            //     .pipe(gulp.dest('./'))
-            //     .pipe(install())
-            //     .on('end', function () {
-            //         done();
-            //     });
+
+            answers.modelName = _this.args[0];
+            answers.modelNameLCase = _this.args[0].toLowerCase();
+            answers.modelNameUCase = _.capitalize(answers.modelName);
+            answers.modelPluralLCase = infection.pluralize(answers.modelNameLCase);
+            var modelNameNameSlug = _.slugify(answers.modelName);
+
+            gulp.src(__dirname + '/templates/model/model.js')
+                .pipe(template(answers))
+                .pipe(rename(answers.modelName + '.js'))
+                .pipe(conflict('./app/models'))
+                .pipe(gulp.dest('./app/models'))
+                .pipe(install())
+                .on('end', function () {
+                    done();
+                });
+
+            if (answers.genRoutes) {
+                gulp.src(__dirname + '/templates/routes/route.js')
+                    .pipe(template(answers))
+                    .pipe(rename(answers.modelPluralLCase + '.js'))
+                    .pipe(conflict('./app/routes'))
+                    .pipe(gulp.dest('./app/routes'))
+                    .pipe(install())
+                    .on('end', function () {
+                        done();
+                    });
+            }
+
+            if (answers.genTests) {
+
+            }
+
         });
 });
