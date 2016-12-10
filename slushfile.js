@@ -137,7 +137,7 @@ gulp.task('jwt', ['main'], function(done) {
         // Overwrite routes file with Auth one.
         gulp.src(__dirname + '/templates/routes/auth_routes.js')
             .pipe(rename('routes.js'))
-            .pipe(conflict('./app/routes'))
+            // .pipe(conflict('./app/routes'))
             .pipe(gulp.dest('./app/routes'))
             .on('end', function () {
             });
