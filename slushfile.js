@@ -194,7 +194,11 @@ gulp.task('model', function (done) {
             }
 
             if (answers.genTests) {
-
+                gulp.src(__dirname + '/templates/tests/test.js')
+                    .pipe(template(answers))
+                    .pipe(rename('test-' + answers.modelPluralLCase + '.js'))
+                    .pipe(conflict('./test'))
+                    .pipe(gulp.dest('./test'));
             }
 
             done();
