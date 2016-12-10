@@ -16,7 +16,9 @@ var gulp = require('gulp'),
     _ = require('underscore.string'),
     inquirer = require('inquirer'),
     path = require('path'),
-    infection = require('inflection');
+    inflection = require('inflection');
+
+var includeJWT = false;
 
 function format(string) {
     var username = string.toLowerCase();
@@ -52,7 +54,7 @@ var defaults = (function () {
     };
 })();
 
-gulp.task('default', function (done) {
+gulp.task('main', function (done) {
     var prompts = [{
         name: 'appName',
         message: 'What is the name of your project?',
@@ -83,15 +85,27 @@ gulp.task('default', function (done) {
 
     }, {
         type: 'confirm',
+        name: 'JWT',
+        message: 'Do you want JWT user authentication?'
+    }
+    , {
+        type: 'confirm',
         name: 'moveon',
         message: 'Continue?'
     }];
     //Ask
     inquirer.prompt(prompts,
         function (answers) {
+            answers.jwtDependencies = '';
+            if (answers.JWT) {
+                includeJWT = answers.JWT;
+                answers.jwtDependencies = ', "bcryptjs": "~2.3.0", "jsonwebtoken": "~7.1.9"';
+            }
+
             if (!answers.moveon) {
                 return done();
             }
+
             answers.appNameSlug = _.slugify(answers.appName);
             gulp.src(__dirname + '/templates/src/**')
                 .pipe(template(answers))
@@ -102,11 +116,36 @@ gulp.task('default', function (done) {
                 }))
                 .pipe(conflict('./'))
                 .pipe(gulp.dest('./'))
-                .pipe(install())
                 .on('end', function () {
                     done();
                 });
         });
+});
+
+gulp.task('jwt', ['main'], function(done) {
+    if (includeJWT) {
+
+        // Copy user model over
+        gulp.src(__dirname + '/templates/model/user.js')
+            .pipe(conflict('./app/models'))
+            .pipe(gulp.dest('./app/models'))
+            // .on('end', function () {
+            //     done();
+            // })
+            ;
+
+        // Overwrite routes file with Auth one.
+        gulp.src(__dirname + '/templates/routes/auth_routes.js')
+            .pipe(rename('routes.js'))
+            .pipe(conflict('./app/routes'))
+            .pipe(gulp.dest('./app/routes'))
+            .on('end', function () {
+            });
+
+        done();
+    } else {
+        done();
+    }
 });
 
 gulp.task('model', function (done) {
@@ -134,37 +173,37 @@ gulp.task('model', function (done) {
                 return done();
             }
 
-            answers.modelName = _this.args[0];
-            answers.modelNameLCase = _this.args[0].toLowerCase();
+            answers.modelName = inflection.singularize(_this.args[0]);
+            answers.modelNameLCase = answers.modelName.toLowerCase();
             answers.modelNameUCase = _.capitalize(answers.modelName);
-            answers.modelPluralLCase = infection.pluralize(answers.modelNameLCase);
+            answers.modelPluralLCase = inflection.pluralize(answers.modelNameLCase);
             var modelNameNameSlug = _.slugify(answers.modelName);
 
             gulp.src(__dirname + '/templates/model/model.js')
                 .pipe(template(answers))
                 .pipe(rename(answers.modelName + '.js'))
                 .pipe(conflict('./app/models'))
-                .pipe(gulp.dest('./app/models'))
-                .pipe(install())
-                .on('end', function () {
-                    done();
-                });
+                .pipe(gulp.dest('./app/models'));
 
             if (answers.genRoutes) {
                 gulp.src(__dirname + '/templates/routes/route.js')
                     .pipe(template(answers))
                     .pipe(rename(answers.modelPluralLCase + '.js'))
                     .pipe(conflict('./app/routes'))
-                    .pipe(gulp.dest('./app/routes'))
-                    .pipe(install())
-                    .on('end', function () {
-                        done();
-                    });
+                    .pipe(gulp.dest('./app/routes'));
             }
 
             if (answers.genTests) {
 
             }
 
+            done();
+
         });
+});
+
+gulp.task('default', ['main', 'jwt'], function(done) {
+    gulp.src('./package.json')
+        .pipe(install());
+    done();
 });
