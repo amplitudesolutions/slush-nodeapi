@@ -52,7 +52,7 @@ module.exports = function(router) {
         })
         
         .put(function(req, res) {
-            <%= modelNameLCase %>.findById(req.params.id, function(err, item) {
+            <%= modelNameUCase %>.findById(req.params.id, function(err, item) {
                 if (err)
                     return res.status(500).send(err);
                     
