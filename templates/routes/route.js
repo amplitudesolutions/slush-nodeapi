@@ -4,11 +4,11 @@ module.exports = function(router) {
 
 	router.route('/<%= modelPluralLCase %>')
         .get(function(req, res) {
-            <%= modelNameUCase %>.find({}, function(err, items) {
+            <%= modelNameUCase %>.find({{deleted: false}}, function(err, <%= modelNameLCase %>) {
                 if (err)
                     return res.status(500).send(err);
                     
-                res.status(200).json(items);
+                res.status(200).json(<%= modelNameLCase %>);
             });
         })
         
@@ -19,11 +19,11 @@ module.exports = function(router) {
            	// department.name = req.body.name
            	// department.active = req.body.active
             
-            <%= modelNameUCase%>.findOne({name: <%= modelNameLCase%>.name}, function(err, data){
+            <%= modelNameUCase%>.findOne({name: <%= modelNameLCase%>.name}, function(err, <%= modelNameLCase %>){
                 if (err)
                     return res.status(500).send(err);
                 
-                if (data) {
+                if (<%= modelNameLCase %>) {
                     res.status(409).json({message: 'Name Already Exists'});
                 } else {
                     <%= modelNameLCase%>.save(function(err) {
@@ -43,52 +43,42 @@ module.exports = function(router) {
     router.route('/<%= modelPluralLCase %>/:id')
         .get(function(req, res) {
             <%= modelNameUCase %>.findById(req.params.id)
-                .exec(function(err, item) {
+                .exec(function(err, <%= modelNameLCase %>) {
                     if (err)
                         return res.status(500).send(err);
                         
-                    res.status(200).json(item);
+                    res.status(200).json(<%= modelNameLCase %>);
                 });
         })
         
         .put(function(req, res) {
-            <%= modelNameUCase %>.findById(req.params.id, function(err, item) {
+            <%= modelNameUCase %>.findById(req.params.id, function(err, <%= modelNameLCase %>) {
                 if (err)
                     return res.status(500).send(err);
                     
                 /* Add your field updates here */
-                item.name = req.body.name;
-                item.active = req.body.active;
+                <%= modelNameLCase %>.name = req.body.name;
+                <%= modelNameLCase %>.active = req.body.active;
                     
-                item.save(function(err) {
+                <%= modelNameLCase %>.save(function(err) {
                     if(err)
                         return res.status(500).send(err);
                         
-                    res.status(200).json(item);
+                    res.status(200).json(<%= modelNameLCase %>);
                 });
             });
         })
         
         .delete(function(req, res) {
+            <%= modelNameUCase %>.findById(req.params.id, function(err, <%= modelNameLCase %>) {
+                <%= modelNameLCase %>.deleted = true;
+                <%= modelNameLCase %>.save(function(err) {
+                    if (err)
+                        return res.status(500).send(err);
 
-            // Employee.findOne({"contactInformation.type": req.params.id}, function(err, employee) {
-            //     if (err)
-            //         return res.send(err);
-
-            //     if (employee) {
-            //         res.status(409).json("EMP_ASSIGNED_EXISTS")
-            //     } else {
-                    <%= modelNameLCase %>.remove({
-                        _id: req.params.id
-                    }, function(err, item) {
-                        if (err)
-                            return res.status(500).send(err);
-                            
-                        res.status(200).json(item);
-                    });
-                // }
-            // });
-
+                    res.status(200).json({message: "<%= modelNameUCase %> Deleted"});
+                })
+            });
         })
     ;
        
