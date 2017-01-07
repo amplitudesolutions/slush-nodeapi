@@ -24,7 +24,7 @@ module.exports = function(router) {
                     return res.status(500).send(err);
                 
                 if (<%= modelNameLCase %>) {
-                    res.status(409).json({message: 'Name Already Exists'});
+                    res.status(409).json({message: '<%= modelNameUCase%> Already Exists'});
                 } else {
                     <%= modelNameLCase%>.save(function(err) {
                         if (err)
