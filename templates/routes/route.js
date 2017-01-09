@@ -4,7 +4,7 @@ module.exports = function(router) {
 
 	router.route('/<%= modelPluralLCase %>')
         .get(function(req, res) {
-            <%= modelNameUCase %>.find({{deleted: false}}, function(err, <%= modelNameLCase %>) {
+            <%= modelNameUCase %>.find({deleted: false}, function(err, <%= modelNameLCase %>) {
                 if (err)
                     return res.status(500).send(err);
                     
