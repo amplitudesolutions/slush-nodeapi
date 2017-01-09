@@ -88,7 +88,7 @@ describe("<%= modelNameUCase %>", function() {
                 res.should.json;
                 res.should.be.a("object");
                 res.body.should.have.property("_id");
-                res.body._id.should.equal(added<%= modelNameUCase %>._id);
+                res.body._id.should.equal(added<%= modelNameUCase %>._id.toString());
                 // ADD CHECKS TO ENSURE THE DATA YOU WANT IS RETURNED
                 // res.body.should.have.property("FIELD_NAME");
                 // res.body.FIELD_NAME.should.equal("FIELD_VALUE");
