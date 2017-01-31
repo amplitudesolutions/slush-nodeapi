@@ -18,23 +18,12 @@ describe("<%= modelNameUCase %>", function() {
     <%=modelNameUCase%>.collection.drop();
     
     beforeEach(function(done) {
-        // ADD FIELDS FOR THE MODEL TO ADD {FIELD_NAME: FIELD_VALUE}
-        var new<%=modelNameUCase%> = {};
+        // ADD FIELDS FOR THE MODEL {FIELD_NAME: FIELD_VALUE}
+        <%=modelNameUCase%>.create({}, function(err, <%=modelNameLCase%>) {
 
-        chai.request(server)
-            .post("/api/<%= modelPluralLCase %>")
-            .send(new<%=modelNameUCase%>)
-            .end(function(err, res) {
-                res.should.have.status(200);
-                res.should.be.json;
-                res.should.be.a("object");
-                res.body.should.have.property("_id");
-                // ADD CHECKS TO ENSURE THE DATA YOU WANT IS RETURNED
-                // res.body.should.have.property("FIELD_NAME");
-                // res.body.FIELD_NAME.should.equal("FIELD_VALUE");
-                added<%= modelNameUCase%> = res.body;
-                done();              
-            });
+            added<%= modelNameUCase%> = <%=modelNameLCase%>;
+            done();
+        });
     });
     
     afterEach(function(done) {
