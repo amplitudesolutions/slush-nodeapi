@@ -21,7 +21,7 @@ module.exports = function(router) {
                             return res.status(500).send(err);
 
                         if (response) {
-                            var token = jwt.sign(user, process.env.SECRET, {
+                            var token = jwt.sign(user, <%= JWTSecret %>, {
                                 expiresIn: 86400
                             });
                             
@@ -51,7 +51,7 @@ module.exports = function(router) {
                 if (data) {
                     res.status(409).json({message: 'Email Already Exists'});
                 } else {
-                    bcrypt.hash(req.body.password, 10, function(err, hash) {
+                    bcrypt.hash(req.body.password, <%= JWTSalt %>, function(err, hash) {
                         if (err)
                             return res.status(500).send(err);
 
@@ -84,7 +84,7 @@ module.exports = function(router) {
                 var bearer = token.split(" ");
                 var bearerToken = bearer[1];
 
-                jwt.verify(bearerToken, process.env.SECRET, function(err, decoded) {
+                jwt.verify(bearerToken, <%= JWTSecret %>, function(err, decoded) {
                     if (err)
                         return res.status(403).json({message: 'Failed to authenticate token'});
                     

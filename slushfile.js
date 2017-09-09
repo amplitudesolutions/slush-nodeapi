@@ -19,6 +19,7 @@ var gulp = require('gulp'),
     inflection = require('inflection');
 
 var includeJWT = false;
+var globalAnswers = '';
 
 function format(string) {
     var username = string.toLowerCase();
@@ -50,7 +51,9 @@ var defaults = (function () {
         userName: osUserName || format(user.name || ''),
         authorName: user.name || '',
         authorEmail: user.email || '',
-        mongodbPath: 'mongodb://localhost:27017'
+        mongodbPath: 'mongodb://localhost:27017',
+        JWTSecret: 'process.env.SECRET',
+        JWTSalt: 'process.env.SALT'
     };
 })();
 
@@ -87,6 +90,20 @@ gulp.task('main', function (done) {
         type: 'confirm',
         name: 'JWT',
         message: 'Do you want JWT user authentication?'
+    }, {
+        when: function(response) {
+            return response.JWT;
+        },
+        name: 'JWTSecret',
+        message: 'What environment variable do you want to use for JWT Secret?',
+        default: defaults.JWTSecret
+    }, {
+        when: function(response) {
+            return response.JWT;
+        },
+        name: 'JWTSalt',
+        message: 'What environment variable do you want to use for JWT Salt?',
+        default: defaults.JWTSalt
     }
     , {
         type: 'confirm',
@@ -99,6 +116,7 @@ gulp.task('main', function (done) {
             answers.jwtDependencies = '';
             if (answers.JWT) {
                 includeJWT = answers.JWT;
+                globalAnswers = answers;
                 answers.jwtDependencies = ', "bcryptjs": "~2.3.0", "jsonwebtoken": "~7.1.9"';
             }
 
@@ -124,9 +142,10 @@ gulp.task('main', function (done) {
 
 gulp.task('jwt', ['main'], function(done) {
     if (includeJWT) {
-
         // Copy user model over
+        console.log(globalAnswers);
         gulp.src(__dirname + '/templates/model/user.js')
+            .pipe(template(globalAnswers))
             .pipe(conflict('./app/models'))
             .pipe(gulp.dest('./app/models'))
             // .on('end', function () {
@@ -136,6 +155,7 @@ gulp.task('jwt', ['main'], function(done) {
 
         // Overwrite routes file with Auth one.
         gulp.src(__dirname + '/templates/routes/auth_routes.js')
+            .pipe(template(globalAnswers))
             .pipe(rename('routes.js'))
             // .pipe(conflict('./app/routes'))
             .pipe(gulp.dest('./app/routes'))

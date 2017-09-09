@@ -1,5 +1,16 @@
 # Slush Nodeapi [![Build Status](https://secure.travis-ci.org/amplitudesolutions/slush-nodeapi.png?branch=master)](https://travis-ci.org/amplitudesolutions/slush-nodeapi) [![NPM version](https://badge-me.herokuapp.com/api/npm/slush-nodeapi.png)](http://badges.enytc.com/for/npm/slush-nodeapi)
 
+## Setup for use before publishing
+
+Clone Repo
+
+Link your npm so you can use the generator
+```bash
+npm  link
+```
+
+All done, use normally
+
 > Slush Generator to quickly scaffold an API using Node, Express and MongoDB
 > Includes JWT based login
 
