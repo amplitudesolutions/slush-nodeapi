@@ -4,11 +4,11 @@ module.exports = function(router) {
 
 	router.route('/<%= modelPluralLCase %>')
         .get(function(req, res) {
-            <%= modelNameUCase %>.find({deleted: false}, function(err, <%= modelNameLCase %>) {
+            <%= modelNameUCase %>.find({deleted: false}, function(err, <%= modelPluralLCase %>) {
                 if (err)
                     return res.status(500).send(err);
                     
-                res.status(200).json(<%= modelNameLCase %>);
+                res.status(200).json(<%= modelPluralLCase %>);
             });
         })
         
