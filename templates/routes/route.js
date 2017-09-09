@@ -13,24 +13,24 @@ module.exports = function(router) {
         })
         
         .post(function(req, res) {
-            var <%= modelNameLCase %> = new <%= modelNameUCase%>();
+            var new<%= modelNameUCase %> = new <%= modelNameUCase%>();
            
            	// Add Fields here
-           	// department.name = req.body.name
-           	// department.active = req.body.active
+           	new<%= modelNameUCase %>.name = req.body.name
+           	// new<%= modelNameUCase %>. = req.body.
             
-            <%= modelNameUCase%>.findOne({name: <%= modelNameLCase%>.name}, function(err, <%= modelNameLCase %>){
+            <%= modelNameUCase%>.findOne({name: new<%= modelNameUCase%>.name}, function(err, <%= modelNameLCase %>){
                 if (err)
                     return res.status(500).send(err);
                 
                 if (<%= modelNameLCase %>) {
                     res.status(409).json({message: '<%= modelNameUCase%> Already Exists'});
                 } else {
-                    <%= modelNameLCase%>.save(function(err) {
+                    new<%= modelNameUCase%>.save(function(err) {
                         if (err)
                             return res.status(500).send(err);
 
-                        var clean<%= modelNameUCase%> = <%= modelNameLCase%>.toObject();
+                        var clean<%= modelNameUCase%> = new<%= modelNameUCase%>.toObject();
                         delete clean<%= modelNameUCase%>['deleted'];
 
                         res.status(200).json(clean<%= modelNameUCase%>);

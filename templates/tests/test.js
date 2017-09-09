@@ -19,7 +19,7 @@ describe("<%= modelNameUCase %>", function() {
     
     beforeEach(function(done) {
         // ADD FIELDS FOR THE MODEL {FIELD_NAME: FIELD_VALUE}
-        <%=modelNameUCase%>.create({}, function(err, <%=modelNameLCase%>) {
+        <%=modelNameUCase%>.create({name: "Test Field"}, function(err, <%=modelNameLCase%>) {
 
             added<%= modelNameUCase%> = <%=modelNameLCase%>;
             done();
@@ -33,7 +33,7 @@ describe("<%= modelNameUCase %>", function() {
     
     it("Should add a new <%= modelNameUCase %>", function(done) {
         // ADD FIELDS FOR THE MODEL TO ADD {FIELD_NAME: FIELD_VALUE}
-        var new<%=modelNameUCase%> = {};
+        var new<%=modelNameUCase%> = { name: "New Test Field" };
 
         chai.request(server)
             .post("/api/<%=modelPluralLCase%>")
@@ -47,6 +47,8 @@ describe("<%= modelNameUCase %>", function() {
                 // ADD CHECKS TO ENSURE THE DATA YOU WANT IS RETURNED
                 // res.body.should.have.property("FIELD_NAME");
                 // res.body.FIELD_NAME.should.equal("FIELD_VALUE");
+                res.body.should.have.property("name");
+                res.body.name.should.equal("New Test Field");
                 res.body.should.not.have.property("deleted");
                 done();              
             });
@@ -64,6 +66,8 @@ describe("<%= modelNameUCase %>", function() {
                 // ADD CHECKS TO ENSURE THE DATA YOU WANT IS RETURNED
                 // res.body[0].should.have.property("FIELD_NAME");
                 // res.body[0].FIELD_NAME.should.equal("FIELD_VALUE");
+                res.body[0].should.have.property("name");
+                res.body[0].name.should.equal("Test Field");
                 res.body[0].should.not.have.property("deleted");
                 done();
             });
@@ -81,6 +85,8 @@ describe("<%= modelNameUCase %>", function() {
                 // ADD CHECKS TO ENSURE THE DATA YOU WANT IS RETURNED
                 // res.body.should.have.property("FIELD_NAME");
                 // res.body.FIELD_NAME.should.equal("FIELD_VALUE");
+                res.body.should.have.property("name");
+                res.body.name.should.equal("Test Field");
                 res.body.should.not.have.property("deleted");
                 done();
             });
@@ -90,7 +96,7 @@ describe("<%= modelNameUCase %>", function() {
         chai.request(server)
             .put("/api/<%=modelPluralLCase%>/" + added<%= modelNameUCase %>._id)
             // INSERT FIELDS TO UPDATE {description: test, active: false}
-            .send({})
+            .send({name: 'Updated Field'})
             .end(function(err, res) {
                 res.should.have.status(200);
                 res.should.json;
@@ -98,6 +104,8 @@ describe("<%= modelNameUCase %>", function() {
                 // ADD CHECKS TO ENSURE THE DATA YOU WANT IS RETURNED
                 // res.body.should.have.property("FIELD_NAME");
                 // res.body.FIELD_NAME.should.equal("FIELD_VALUE");
+                res.body.should.have.property("name");
+                res.body.name.should.equal("Updated Field");
                 res.body.should.not.have.property("deleted");
                 done();
             });

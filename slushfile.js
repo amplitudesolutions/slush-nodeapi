@@ -143,7 +143,6 @@ gulp.task('main', function (done) {
 gulp.task('jwt', ['main'], function(done) {
     if (includeJWT) {
         // Copy user model over
-        console.log(globalAnswers);
         gulp.src(__dirname + '/templates/model/user.js')
             .pipe(template(globalAnswers))
             .pipe(conflict('./app/models'))
