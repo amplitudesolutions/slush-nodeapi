@@ -1,41 +1,47 @@
 {
-    "name": "slush-nodeapi",
-    "description": "Slush Generator to quickly scaffold an API using Node, Express and MongoDB",
-    "version": "0.1.0",
-    "homepage": "https://github.com/amplitudesolutions/slush-nodeapi",
-    "author": {
-        "name": "Martin Fedec",
-        "email": "martin@amplitudesolutions.ca"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/amplitudesolutions/slush-nodeapi.git"
-    },
-    "bugs": {
-        "url": "https://github.com/amplitudesolutions/slush-nodeapi/issues"
-    },
-    "license": "MIT",
-    "main": "slushfile.js",
-    "engines": {
-        "node": ">= 0.10.26",
-        "npm": ">=1.4.3"
-    },
-    "scripts": {
-        "test": "echo \"No tests\""
-    },
-    "dependencies": {
-        "slush": ">=1.0.0",
-        "gulp": "^3.6.2",
-        "gulp-template": "^0.1.1",
-        "gulp-install": "^0.1.4",
-        "gulp-conflict": "^0.1.1",
-        "gulp-rename": "^1.2.0",
-        "underscore.string": "^2.3.3",
-        "inquirer": "^0.8.0",
-        "iniparser": "^1.0.5",
-        "inflection": "^1.10.0"
-    },
-    "keywords": [
-        "slushgenerator"
-    ]
+  "name": "slush-nodeapi",
+  "description": "Slush Generator to quickly scaffold an API using Node, Express and MongoDB",
+  "version": "0.1.0",
+  "homepage": "https://github.com/amplitudesolutions/slush-nodeapi",
+  "author": {
+    "name": "Martin Fedec",
+    "email": "martin@amplitudesolutions.ca"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/amplitudesolutions/slush-nodeapi.git"
+  },
+  "bugs": {
+    "url": "https://github.com/amplitudesolutions/slush-nodeapi/issues"
+  },
+  "license": "MIT",
+  "main": "slushfile.js",
+  "engines": {
+    "node": ">= 0.10.26",
+    "npm": ">=1.4.3"
+  },
+  "scripts": {
+    "test": "echo \"No tests\""
+  },
+  "dependencies": {
+    "slush": ">=1.0.0",
+    "gulp": "^3.6.2",
+    "gulp-template": "^0.1.1",
+    "gulp-install": "^0.1.4",
+    "gulp-conflict": "^0.1.1",
+    "gulp-rename": "^1.2.0",
+    "underscore.string": "^2.3.3",
+    "inquirer": "^0.8.0",
+    "iniparser": "^1.0.5",
+    "inflection": "^1.10.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "gulp-istanbul": "^1.1.2",
+    "gulp-mocha": "^4.3.1",
+    "mock-gulp-dest": "^0.1.1"
+  },
+  "keywords": [
+    "slushgenerator"
+  ]
 }
